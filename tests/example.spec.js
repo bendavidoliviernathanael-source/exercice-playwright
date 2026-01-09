@@ -34,6 +34,7 @@ test("test connexion à Talaron chic", async ({ page }) => {
   await expect(page.locator("#post-83")).toContainText(
     "Bonjour oliviernathanael (vous n’êtes pas oliviernathanael ? Déconnexion)"
   );
+  await page.locator("#post-83").screenshot({ path: "screenshot.png" });
 });
 
 const urldistanciel = "https://sidewalk:elementary@smiling-glove.localsite.io/";
