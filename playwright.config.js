@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig, devices } from "@playwright/test";
+require("dotenv").config();
 
 /**
  * Read environment variables from file.
@@ -8,6 +9,13 @@ import { defineConfig, devices } from "@playwright/test";
 // import dotenv from 'dotenv';
 // import path from 'path';
 // dotenv.config({ path: path.resolve(__dirname, '.env') });
+
+if (!process.env.BASE_URL) {
+  throw new Error("❌ BASE_URL manquant dans .env");
+}
+if (!process.env.HTTP_USERNAME || !process.env.HTTP_PASSWORD) {
+  throw new Error("❌ Identifiants HTTP manquants dans .env");
+}
 
 /**
  * @see https://playwright.dev/docs/test-configuration
@@ -34,6 +42,14 @@ export default defineConfig({
     /* Base URL to use in actions like `await page.goto('')`. */
     // baseURL: 'http://localhost:3000',
 
+    baseURL: process.env.BASE_URL,
+
+    httpCredentials: {
+      username: process.env.HTTP_USERNAME,
+      password: process.env.HTTP_PASSWORD,
+    },
+
+    ignoreHTTPSErrors: true,
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",
   },

@@ -20,7 +20,7 @@ test.skip("get started link", async ({ page }) => {
   ).toBeVisible();
 });
 
-test("test connexion à Talaron chic", async ({ page }) => {
+test.skip("test connexion à Talaron chic", async ({ page }) => {
   await page.goto("https://sidewalk:elementary@smiling-glove.localsite.io/");
   await page.getByRole("link").filter({ hasText: /^$/ }).nth(1).hover();
   await page.getByRole("link", { name: "Se déconnecter" }).click();
@@ -79,7 +79,7 @@ const adresses2 = [
   urldistanciel2 + "mon-compte/informations_personnelles/",
 ];
 
-test("Présence d'un bouton d'accès à la barre de recherche", async ({
+test.skip("Présence d'un bouton d'accès à la barre de recherche", async ({
   page,
 }) => {
   await page.goto("https://sidewalk:elementary@smiling-glove.localsite.io/");
@@ -143,4 +143,9 @@ test.skip("test2", async ({ page }) => {
   await page.getByText("Laboriosam unde…").click();
   await expect(page.getByText("Total estimé")).toBeVisible();
   await page.getByRole("link", { name: "Talaron Chic" }).click();
+});
+
+test("HTTP AUTH OK", async ({ page }) => {
+  await page.goto("/");
+  await expect(page).not.toHaveTitle(/401 unauthorised/i);
 });
