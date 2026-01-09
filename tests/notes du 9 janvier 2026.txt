@@ -1,0 +1,25 @@
+-- projet la semaine prochaine par groupe
+
+site préparé par raoul Fesquet
+
+jira // excel 
+
+créer cas de tests prioritaires
+
+créer un repo git  -->  utiliser des branches
+
+rendu repo + les cas sur jira
+
+rédiger les cas de tests puis les automatiser
+
+choix cypress ou playwright
+
+
+
+-- aujourd'hui continuer sur playwright
+
+
+
+
+
+

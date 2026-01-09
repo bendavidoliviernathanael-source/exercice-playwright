@@ -1,0 +1,145 @@
+// @ts-check
+import { test, expect } from "@playwright/test";
+
+test.skip("has title", async ({ page }) => {
+  await page.goto("https://playwright.dev/");
+
+  // Expect a title "to contain" a substring.
+  await expect(page).toHaveTitle(/Playwright/);
+});
+
+test.skip("get started link", async ({ page }) => {
+  await page.goto("https://playwright.dev/");
+
+  // Click the get started link.
+  await page.getByRole("link", { name: "Get started" }).click();
+
+  // Expects page to have a heading with the name of Installation.
+  await expect(
+    page.getByRole("heading", { name: "Installation" })
+  ).toBeVisible();
+});
+
+test("test connexion à Talaron chic", async ({ page }) => {
+  await page.goto("https://sidewalk:elementary@smiling-glove.localsite.io/");
+  await page.getByRole("link").filter({ hasText: /^$/ }).nth(1).hover();
+  await page.getByRole("link", { name: "Se déconnecter" }).click();
+  await page.getByRole("textbox", { name: "Identifiant ou e-mail" }).click();
+  await page
+    .getByRole("textbox", { name: "Identifiant ou e-mail" })
+    .fill("oliviernathanael");
+  await page.locator("#password").click();
+  await page.locator("#password").fill("azerty");
+  await page.getByRole("button", { name: "Se connecter" }).click();
+  await expect(page.locator("#post-83")).toContainText(
+    "Bonjour oliviernathanael (vous n’êtes pas oliviernathanael ? Déconnexion)"
+  );
+});
+
+const urldistanciel = "https://sidewalk:elementary@smiling-glove.localsite.io/";
+const urldistanciel2 = "https://smiling-glove.localsite.io/";
+const urlpresentiel = "https://landscape:somber@dull-ghost.localsite.io/";
+
+const adresses1 = [
+  urldistanciel,
+  urldistanciel + "produit/ex/",
+  urldistanciel +
+    "categorie-produit/sport/sports_exterieur/planche_a_roulettes/",
+  //urldistanciel+"letiquette-produit/vroum-vroum/",
+  // "urldistancielmarque/louis-pasteur/",
+  urldistanciel + "panier/",
+  urldistanciel + "?s=&post_type=product&category=0",
+  urldistanciel + "commander/",
+  urldistanciel + "mon-compte/",
+  urldistanciel + "mon-compte/mes_commandes/",
+  urldistanciel + "mon-compte/mes_telechargements/",
+  urldistanciel + "mon-compte/mes_adresses/",
+  urldistanciel + "mon-compte/mes_adresses/facturation/",
+  urldistanciel + "mon-compte/mes_adresses/livraison/",
+  urldistanciel + "mon-compte/informations_personnelles/",
+];
+
+const adresses2 = [
+  urldistanciel2,
+  urldistanciel2 + "produit/ex/",
+  urldistanciel2 +
+    "categorie-produit/sport/sports_exterieur/planche_a_roulettes/",
+  //urldistanciel2+"etiquette-produit/vroum-vroum/",
+  // urldistanciel2+"marque/louis-pasteur/",
+  urldistanciel2 + "panier/",
+  urldistanciel2 + "?s=&post_type=product&category=0",
+  urldistanciel2 + "commander/",
+  urldistanciel2 + "mon-compte/",
+  urldistanciel2 + "mon-compte/mes_commandes/",
+  urldistanciel2 + "mon-compte/mes_telechargements/",
+  urldistanciel2 + "mon-compte/mes_adresses/",
+  urldistanciel2 + "mon-compte/mes_adresses/facturation/",
+  urldistanciel2 + "mon-compte/mes_adresses/livraison/",
+  urldistanciel2 + "mon-compte/informations_personnelles/",
+];
+
+test("Présence d'un bouton d'accès à la barre de recherche", async ({
+  page,
+}) => {
+  await page.goto("https://sidewalk:elementary@smiling-glove.localsite.io/");
+  await page.getByRole("link").filter({ hasText: /^$/ }).nth(1).hover();
+  await page.getByRole("link", { name: "Se déconnecter" }).click();
+  await page.getByRole("textbox", { name: "Identifiant ou e-mail" }).click();
+  await page
+    .getByRole("textbox", { name: "Identifiant ou e-mail" })
+    .fill("oliviernathanael");
+  await page.locator("#password").click();
+  await page.locator("#password").fill("azerty");
+  await page.getByRole("button", { name: "Se connecter" }).click();
+  await expect(page.locator("#post-83")).toContainText(
+    "Bonjour oliviernathanael (vous n’êtes pas oliviernathanael ? Déconnexion)"
+  );
+
+  let cpt = 0;
+  while (cpt < adresses2.length) {
+    //Ouvrir page
+    await page.goto(adresses2[cpt]);
+    //page est ouverte
+    await expect(page).toHaveURL(adresses2[cpt]);
+    //Vérifier qu’un bouton en forme de loupe (voir image en pièce jointe) est présent en haut à droite de la page.
+    //Un bouton en forme de loupe est bien présent en haut à droite de la page.
+    await expect(
+      page.getByRole("link").filter({ hasText: /^$/ }).first()
+    ).toBeVisible();
+    //Cliquer sur le bouton en forme de loupe.
+    await page.getByRole("link").filter({ hasText: /^$/ }).first().click();
+    //Un ruban apparaît en haut de la page.
+    await expect(page.locator("#search-bar")).toBeVisible();
+    //Vérifier que le ruban contient un champ interactible avec le texte "Rechercher un produit…" superposé dessus .
+    await expect(
+      page.getByRole("searchbox", { name: "Rechercher un produit..." })
+    ).toBeVisible();
+    //Vérifier que le ruban contient un bouton en forme de loupe à droite du champ (voir l’image en pièce jointe).
+    await expect(page.locator("#search-bar").getByRole("button")).toBeVisible();
+    //Le ruban contient bien une barre de recherche.
+    await expect(
+      page.getByRole("searchbox", { name: "Rechercher un produit..." })
+    ).toBeVisible();
+    cpt = cpt + 1;
+  }
+});
+test.skip("test1", async ({ page }) => {
+  await page.goto("https://sidewalk:elementary@smiling-glove.localsite.io/");
+  await page
+    .getByRole("button", { name: "Ajouter au panier : “Alias.”" })
+    .click();
+  await page.getByRole("link", { name: "Voir le panier" }).click();
+  await page.getByText("Laboriosam unde…").click();
+  await expect(page.getByText("Total estimé")).toBeVisible();
+  await page.getByRole("link", { name: "Talaron Chic" }).click();
+});
+test.skip("test2", async ({ page }) => {
+  await page.goto("https://sidewalk:elementary@smiling-glove.localsite.io/");
+  await page
+    .getByRole("button", { name: "Ajouter au panier : “Alias.”" })
+    .click();
+  await page.getByRole("link", { name: "Voir le panier" }).click();
+  await page.getByText("Laboriosam unde…").click();
+  await expect(page.getByText("Total estimé")).toBeVisible();
+  await page.getByRole("link", { name: "Talaron Chic" }).click();
+});
